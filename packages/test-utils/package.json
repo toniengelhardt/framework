@@ -25,7 +25,7 @@
   "devDependencies": {
     "playwright": "^1.26.0",
     "unbuild": "latest",
-    "vitest": "^0.22.1"
+    "vitest": "^0.23.4"
   },
   "peerDependencies": {
     "vue": "^3.2.39"
