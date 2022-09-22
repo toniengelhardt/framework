@@ -7,14 +7,17 @@ import { NuxtConfigSchema } from '@nuxt/schema'
 export interface LoadNuxtConfigOptions extends LoadConfigOptions<NuxtConfig> {}
 
 export async function loadNuxtConfig (opts: LoadNuxtConfigOptions): Promise<NuxtOptions> {
+  (globalThis as any).defineNuxtConfig = (c: any) => c
   const result = await loadConfig<NuxtConfig>({
     name: 'nuxt',
     configFile: 'nuxt.config',
     rcFile: '.nuxtrc',
+    extend: { extendKey: ['theme', 'extends'] },
     dotenv: true,
     globalRc: true,
     ...opts
   })
+  delete (globalThis as any).defineNuxtConfig
   const { configFile, layers = [], cwd } = result
   const nuxtConfig = result.config!
 
@@ -33,6 +36,17 @@ export async function loadNuxtConfig (opts: LoadNuxtConfigOptions): Promise<Nuxt
   // Filter layers
   nuxtConfig._layers = layers.filter(layer => layer.configFile && !layer.configFile.endsWith('.nuxtrc'))
 
+  // Ensure at least one layer remains (without nuxt.config)
+  if (!nuxtConfig._layers.length) {
+    nuxtConfig._layers.push({
+      cwd,
+      config: {
+        rootDir: cwd,
+        srcDir: cwd
+      }
+    })
+  }
+
   // Resolve and apply defaults
-  return applyDefaults(NuxtConfigSchema, nuxtConfig) as NuxtOptions
+  return await applyDefaults(NuxtConfigSchema, nuxtConfig) as NuxtOptions
 }

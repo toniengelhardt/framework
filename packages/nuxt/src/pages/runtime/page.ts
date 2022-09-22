@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, inject, provide, reactive, onMounted, nextTick, Suspense, Transition } from 'vue'
+import { computed, defineComponent, h, inject, provide, reactive, onMounted, nextTick, Suspense, Transition, KeepAliveProps, TransitionProps } from 'vue'
 import type { DefineComponent, VNode } from 'vue'
 import { RouteLocationNormalized, RouteLocationNormalizedLoaded, RouterView } from 'vue-router'
 import type { RouteLocation } from 'vue-router'
@@ -17,6 +17,14 @@ export default defineComponent({
   props: {
     name: {
       type: String
+    },
+    transition: {
+      type: [Boolean, Object] as any as () => boolean | TransitionProps,
+      default: undefined
+    },
+    keepalive: {
+      type: [Boolean, Object] as any as () => boolean | KeepAliveProps,
+      default: undefined
     },
     route: {
       type: Object as () => RouteLocationNormalized
@@ -38,10 +46,10 @@ export default defineComponent({
           if (!routeProps.Component) { return }
 
           const key = generateRouteKey(props.pageKey, routeProps)
-          const transitionProps = routeProps.route.meta.pageTransition ?? defaultPageTransition
+          const transitionProps = props.transition ?? routeProps.route.meta.pageTransition ?? (defaultPageTransition as TransitionProps)
 
           return _wrapIf(Transition, transitionProps,
-            wrapInKeepAlive(routeProps.route.meta.keepalive ?? defaultKeepaliveConfig, isNested && nuxtApp.isHydrating
+            wrapInKeepAlive(props.keepalive ?? routeProps.route.meta.keepalive ?? (defaultKeepaliveConfig as KeepAliveProps), isNested && nuxtApp.isHydrating
               // Include route children in parent suspense
               ? h(Component, { key, routeProps, pageKey: key, hasTransition: !!transitionProps } as {})
               : h(Suspense, {
@@ -66,7 +74,9 @@ const Component = defineComponent({
   props: ['routeProps', 'pageKey', 'hasTransition'],
   setup (props) {
     // Prevent reactivity when the page will be rerendered in a different suspense fork
+    // eslint-disable-next-line vue/no-setup-props-destructure
     const previousKey = props.pageKey
+    // eslint-disable-next-line vue/no-setup-props-destructure
     const previousRoute = props.routeProps.route
 
     // Provide a reactive route within the page
