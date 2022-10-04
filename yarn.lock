@@ -1711,6 +1711,7 @@ __metadata:
   dependencies:
     "@types/lodash.template": ^4
     "@types/semver": ^7
+    "@vitejs/plugin-vue": ^3.1.0
     c12: ^0.2.13
     create-require: ^1.1.1
     defu: ^6.1.0
@@ -1758,6 +1759,12 @@ __metadata:
   checksum: a12d5bddd2767d9fc4f4a3686bfbdeec06c446cc9f127daaff2e2691b69caa87cf8d9e3408066f6ae9a8f3483a34b8a481fc43d61b08ec5abce5a60244f94f0a
   languageName: node
   linkType: hard
+
+"@nuxt/test-utils@link:./packages/test-utils::locator=nuxt-framework%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@nuxt/test-utils@link:./packages/test-utils::locator=nuxt-framework%40workspace%3A."
+  languageName: node
+  linkType: soft
 
 "@nuxt/test-utils@workspace:packages/test-utils":
   version: 0.0.0-use.local
@@ -1809,7 +1816,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/vite-builder@3.0.0-rc.11, @nuxt/vite-builder@workspace:packages/vite":
+"@nuxt/vite-builder@link:./packages/vite::locator=nuxt-framework%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@nuxt/vite-builder@link:./packages/vite::locator=nuxt-framework%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@nuxt/vite-builder@workspace:packages/vite":
   version: 0.0.0-use.local
   resolution: "@nuxt/vite-builder@workspace:packages/vite"
   dependencies:
@@ -10481,10 +10494,12 @@ __metadata:
   resolution: "nuxt-framework@workspace:."
   dependencies:
     "@actions/core": ^1.9.1
+    "@nuxt/test-utils": "link:./packages/test-utils"
     "@nuxtjs/eslint-config-typescript": ^11.0.0
     "@types/crawler": ^1.2.2
     "@types/node": ^16.11.60
     "@types/rimraf": ^3
+    "@types/semver": ^7
     "@unocss/reset": ^0.45.23
     case-police: ^0.5.10
     changelogen: ^0.3.2
@@ -10497,10 +10512,15 @@ __metadata:
     jiti: ^1.16.0
     lerna: ^5.5.2
     markdownlint-cli: ^0.32.2
+    ohmyfetch: ^0.4.19
     pathe: ^0.3.8
     rimraf: ^3.0.2
+    semver: ^7.3.7
+    std-env: ^3.2.1
     typescript: ^4.8.3
+    ufo: ^0.8.5
     unbuild: ^0.8.11
+    vite: ^3.1.4
     vitest: ~0.19.1
     vue-tsc: ^0.39.5
   languageName: unknown
